@@ -21,6 +21,11 @@ class Saved extends Component {
           )
           .catch(err => console.log(err));
     };
+    deleteBook = id => {
+        API.deleteBook(id)
+          .then(res => this.loadBooks())
+          .catch(err => console.log(err));
+      };
     render(){
         return (
             <Container fluid>
@@ -28,9 +33,18 @@ class Saved extends Component {
                     <List>
                         {this.state.savedBooks.map(book=>(
                             <ListItem key={book.id}>
+                                <img src={book.image}></img>
                                 <strong>
-                                    {book.title}
+                                    {book.title} by {book.authors.map(aut=>(
+                                        aut+", "
+                                    )
+                                        )}
                                 </strong>
+                                <DeleteBtn onClick={()=>this.deleteBook(book._id)}/>
+                                <p>
+                                    {book.description}
+                                </p>
+                                
                             </ListItem>
                         ))}
                     </List>
