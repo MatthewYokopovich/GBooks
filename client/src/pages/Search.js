@@ -19,13 +19,18 @@ class Search extends Component {
         });
       };
       saveBook = b=>{
+          const newBooks = this.state.books.filter(btc=> b.volumeInfo.infoLink !== btc.volumeInfo.infoLink );
           API.saveBook({
             title: b.volumeInfo.title,
             authors: b.volumeInfo.authors,
             description: b.volumeInfo.description,
             image: b.volumeInfo.imageLinks.thumbnail,
             link: b.volumeInfo.infoLink
-          });
+          }).then(res=>{
+            this.setState({
+              books: newBooks
+            })
+          })
       }
       handleFormSubmit = e=>{
           e.preventDefault();
@@ -38,6 +43,13 @@ class Search extends Component {
                     })
                 })
           }
+      }
+      getSavedBooks = ()=>{
+        API.getBooks().then(res=>{
+          this.setState({
+            savedBooks: res.data
+          })
+        })
       }
     render(){
         return (
@@ -71,10 +83,12 @@ class Search extends Component {
                   <ListItem key={book.id}>
                     <Link to={book.volumeInfo.infoLink}>
                       <strong>
-                        {book.volumeInfo.title} by {book.volumeInfo.authors[0]}
+                        {book.volumeInfo.title} by {book.volumeInfo.authors.join(", ")}
                       </strong>
                     </Link>
-                    <DeleteBtn onClick={() => this.saveBook(book)} />
+                    <button className="btn btn-primary" style={{float: "right"}}onClick={() => this.saveBook(book)} >
+                      Save
+                      </button>
                   </ListItem>
                 ))}
               </List>

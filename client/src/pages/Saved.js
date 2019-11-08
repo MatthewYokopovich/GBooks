@@ -35,10 +35,7 @@ class Saved extends Component {
                             <ListItem key={book.id}>
                                 <img src={book.image}></img>
                                 <strong>
-                                    {book.title} by {book.authors.map(aut=>(
-                                        aut+", "
-                                    )
-                                        )}
+                                    {book.title} by {book.authors.join(", ")}
                                 </strong>
                                 <DeleteBtn onClick={()=>this.deleteBook(book._id)}/>
                                 <p>
